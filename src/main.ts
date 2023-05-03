@@ -1,51 +1,16 @@
 import { Hands, HAND_CONNECTIONS, Results } from "@mediapipe/hands";
+import Camera from "./Camera";
 
-const inputvideo = document.getElementById("inputvideo") as HTMLVideoElement;
 const outputimage = document.getElementById("outputimage") as HTMLCanvasElement;
-const flipcanvas = document.getElementById("flipcanvas") as HTMLCanvasElement;
 
-var canvasCtx = outputimage.getContext("2d")!;
-var flipCtx = flipcanvas.getContext("2d")!;
+const canvasCtx = outputimage.getContext("2d")!;
 
-//flipCtx.translate(1280 + 1280 / 2, 720 + 720 / 2);
+async function onFrame(frame: HTMLCanvasElement) {
+    await hands.send({image: frame});
+}
 
-//took fucking ages to figure this out. Flips flipCtx horizontally
-flipCtx.translate(1280/2, 720/2);
-flipCtx.scale(-1,1);
-flipCtx.translate(-1280/2,-720/2);
+const camera = new Camera(onFrame);
 
-var firstFrame=true;
-
-navigator.mediaDevices.getUserMedia({
-    audio: false,
-    video: {
-        width: 1280,
-        height: 720
-    }
-}).then(async (stream) => {
-    /* use the stream */
-    inputvideo.srcObject = stream;
-    await inputvideo.play();
-    async function onFrame() {
-        if(firstFrame) {
-            firstFrame=false;
-        } else {
-            //flipCtx.save();
-            //flipCtx.translate(1280, 720);
-            //flipCtx.scale(-1,0);
-            flipCtx.drawImage(inputvideo, 0, 0/*, 1280, 720*/);
-            //flipCtx.restore();
-            //console.log("drawn");
-        }
-        await hands.send({image: flipcanvas})
-        inputvideo.requestVideoFrameCallback(onFrame);
-    }
-    inputvideo.requestVideoFrameCallback(onFrame);
-})
-.catch((error) => {
-    /* handle the error */
-    console.error(error);
-});
 function onResults(results: Results) {
     canvasCtx.save();
     canvasCtx.clearRect(0, 0, outputimage.width, outputimage.height);

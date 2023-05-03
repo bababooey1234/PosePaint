@@ -8,52 +8,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const hands_1 = require("@mediapipe/hands");
-const inputvideo = document.getElementById("inputvideo");
+const Camera_1 = __importDefault(require("./Camera"));
 const outputimage = document.getElementById("outputimage");
-const flipcanvas = document.getElementById("flipcanvas");
-var canvasCtx = outputimage.getContext("2d");
-var flipCtx = flipcanvas.getContext("2d");
-//flipCtx.translate(1280 + 1280 / 2, 720 + 720 / 2);
-//took fucking ages to figure this out. Flips flipCtx horizontally
-flipCtx.translate(1280 / 2, 720 / 2);
-flipCtx.scale(-1, 1);
-flipCtx.translate(-1280 / 2, -720 / 2);
-var firstFrame = true;
-navigator.mediaDevices.getUserMedia({
-    audio: false,
-    video: {
-        width: 1280,
-        height: 720
-    }
-}).then((stream) => __awaiter(void 0, void 0, void 0, function* () {
-    /* use the stream */
-    inputvideo.srcObject = stream;
-    yield inputvideo.play();
-    function onFrame() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (firstFrame) {
-                firstFrame = false;
-            }
-            else {
-                //flipCtx.save();
-                //flipCtx.translate(1280, 720);
-                //flipCtx.scale(-1,0);
-                flipCtx.drawImage(inputvideo, 0, 0 /*, 1280, 720*/);
-                //flipCtx.restore();
-                //console.log("drawn");
-            }
-            yield hands.send({ image: flipcanvas });
-            inputvideo.requestVideoFrameCallback(onFrame);
-        });
-    }
-    inputvideo.requestVideoFrameCallback(onFrame);
-}))
-    .catch((error) => {
-    /* handle the error */
-    console.error(error);
-});
+const canvasCtx = outputimage.getContext("2d");
+function onFrame(frame) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield hands.send({ image: frame });
+    });
+}
+const camera = new Camera_1.default(onFrame);
 function onResults(results) {
     canvasCtx.save();
     canvasCtx.clearRect(0, 0, outputimage.width, outputimage.height);
