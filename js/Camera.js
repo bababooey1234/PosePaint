@@ -1,6 +1,6 @@
 "use strict";
-//inputs: function call
-//outputs: video element, actual width+height
+//inputs: onFrame function
+//outputs: calls this function on every frame
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {

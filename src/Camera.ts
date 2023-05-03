@@ -7,7 +7,7 @@ export default class {
     private outputContext = this.outputCanvas.getContext("2d")!;
 
     constructor(onFrame: (frame: HTMLCanvasElement) => Promise<void>) {
-        navigator.mediaDevices.getUserMedia({ // obtain camera stream resolution closest to 4K https://stackoverflow.com/a/48546227/13717363
+        navigator.mediaDevices.getUserMedia({ // obtain camera stream resolution closest to 4K
             audio: false,
             video: {
                 width: {ideal: 4096},
