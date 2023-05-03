@@ -1,0 +1,34 @@
+<!--DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Getting Started</title>
+  </head>
+  <body>
+  </body>
+  </html-->
+  
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Camera Test</title>
+        <script defer src="generated.js"></script>
+        <style>
+            #inputvideo {
+                height: 48vh;
+                width: auto;
+            }
+            #outputimage {
+                height: 48vh;
+            }
+        </style>
+    </head>
+
+    <body>
+        <video width="1280" height="720" id="inputvideo"></video>
+        <canvas id="flipcanvas" width="1280" height="720"></canvas>
+        <canvas width="1280" height="720" id="outputimage"></canvas>
+    </body>
+</html>
