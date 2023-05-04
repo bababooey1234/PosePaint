@@ -4,20 +4,32 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Camera Test</title>
-        <script defer src="generated.js"></script>
+        <script defer src="generated.js"></script> <!-- Load the script, all at once, as soon as the body loads -->
         <style>
             #inputvideo {
                 display: none;
             }
+            #flipcanvas {
+                display: none;
+            }
             #outputimage {
-                height: 48vh;
+                /* centering, from https://stackoverflow.com/a/40167175 */
+                position: absolute;
+                margin: auto;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+            }
+            body {
+                margin: 0;
             }
         </style>
     </head>
 
     <body>
-        <video width="1280" height="720" id="inputvideo"></video>
-        <canvas id="flipcanvas" width="1280" height="720"></canvas>
-        <canvas width="1280" height="720" id="outputimage"></canvas>
+        <video id="inputvideo"></video>
+        <canvas id="flipcanvas"></canvas>
+        <canvas id="outputimage"></canvas>
     </body>
 </html>

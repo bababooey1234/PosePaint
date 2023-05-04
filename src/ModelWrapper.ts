@@ -1,7 +1,7 @@
 //inputs: onResults function, sendInput call
 //outputs: canvas with hands drawn, then calls onResults
 
-import { Hands, ResultsListener, InputMap, Results, HAND_CONNECTIONS } from "@mediapipe/hands";
+import { Hands, ResultsListener, Results, HAND_CONNECTIONS, InputImage } from "@mediapipe/hands";
 import ApplicationState from "./ApplicationState";
 
 const outputimage = document.getElementById("outputimage") as HTMLCanvasElement;
@@ -20,8 +20,8 @@ export default class {
         });
         this.model.onResults(listener);
     }
-    public async sendInput(input: InputMap) {
-        return this.model.send(input)
+    public async sendInput(image: InputImage) {
+        return this.model.send({image: image})
     }
     public drawConnections(results: Results) {
         canvasCtx.save();

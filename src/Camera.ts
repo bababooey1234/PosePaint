@@ -1,9 +1,12 @@
 //inputs: onFrame function
 //outputs: calls this function on every frame
 
+import UI from "./UI";
+
 export default class {
-    private videoElement = document.getElementById("inputvideo") as HTMLVideoElement; /* exposed to get width and height */
+    private videoElement = document.getElementById("inputvideo") as HTMLVideoElement;
     private outputCanvas = document.getElementById("flipcanvas") as HTMLCanvasElement;
+    private outputImage = document.getElementById("outputimage") as HTMLCanvasElement;
     private outputContext = this.outputCanvas.getContext("2d")!;
 
     constructor(onFrame: (frame: HTMLCanvasElement) => Promise<void>) {
@@ -16,8 +19,9 @@ export default class {
         }).then(async (stream) => {
             // get actual camera resolution and direction
             let settings = stream.getVideoTracks()[0].getSettings();
-            this.videoElement.width = this.outputCanvas.width = settings.width!;
-            this.videoElement.height = this.outputCanvas.height = settings.height!;
+            this.videoElement.width = this.outputCanvas.width = this.outputImage.width = settings.width!;
+            this.videoElement.height = this.outputCanvas.height = this.outputImage.height = settings.height!;
+            UI.resizeCanvas();
             // if camera is a selfie camera, flip the canvas
             if(settings.facingMode != "environment") {
                 //took fucking ages to figure this out. Flips outputContext horizontally

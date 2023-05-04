@@ -8,6 +8,6 @@ function onResults(results: Results) {
 const model = new ModelWrapper(onResults);
 
 async function onFrame(frame: HTMLCanvasElement) {
-    await model.sendInput({image: frame});
+    await model.sendInput(frame);
 }
 const camera = new Camera(onFrame); //starts the pipeline
