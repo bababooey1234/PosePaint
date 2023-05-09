@@ -1,13 +1,14 @@
 import ModelWrapper from "./ModelWrapper";
-import Camera from "./Camera";
 import { Results } from "@mediapipe/hands";
+import UI from './UI';
+import ApplicationState from "./ApplicationState";
 
+// define actions taken when model produces results
 function onResults(results: Results) {
-    model.drawConnections(results);
+    ApplicationState.model.drawConnections(results);
 }
-const model = new ModelWrapper(onResults);
+// create model (uninitialised)
+ApplicationState.model = new ModelWrapper(onResults);
 
-async function onFrame(frame: HTMLCanvasElement) {
-    await model.sendInput(frame);
-}
-const camera = new Camera(onFrame); //starts the pipeline
+// Initialise the UI
+UI.init();

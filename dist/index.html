@@ -13,6 +13,7 @@
                 display: none;
             }
             #outputimage {
+                image-rendering: pixelated;
                 /* centering, from https://stackoverflow.com/a/40167175 */
                 position: absolute;
                 margin: auto;
@@ -24,6 +25,33 @@
             body {
                 margin: 0;
             }
+            #overlay {
+                display: inline;
+                opacity: 1;
+                transition: opacity 1s;
+                background-color: rgba(255, 255, 255, 0.5);
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+            }
+            #panel {
+                background-color: white;
+                border: solid black 2px;
+                width: 50%;
+                height: 50%;
+                position: absolute;
+                top: 25%;
+                left: 25%;
+            }
+            #noidswarning {
+                display: none;
+                background-color: lightcoral;
+                color: darkred;
+                margin: 5px;
+                padding: 5px
+            }
         </style>
     </head>
 
@@ -31,5 +59,18 @@
         <video id="inputvideo"></video>
         <canvas id="flipcanvas"></canvas>
         <canvas id="outputimage"></canvas>
+        <canvas id="paintingcanvas"></canvas>
+        <div id="overlay">
+            <div id="panel">
+                <input type="file" id="imgInput" accept="image/*">
+                <select id="selectCamera"></select>
+                <div id="noidswarning">
+                    <span>Warning: browser is blocking access to webcam IDs, so not all webcams will be shown and their names are unknown.</span><br>
+                    <button id="addIDs">Click to allow access</button>
+                </div>
+                <button id="btnBegin">Close Menu</button>
+            </div>
+        </div>
+        <!--testing only--><button style="position: absolute; top: 97vh; left: 0" id="testopenmenu">Open Menu</button>
     </body>
 </html>
