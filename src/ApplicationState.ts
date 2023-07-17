@@ -1,3 +1,4 @@
+import BrushOptions from "./BrushOptions";
 import Camera from "./Camera";
 import ModelWrapper from "./ModelWrapper";
 
@@ -8,11 +9,15 @@ type State = {
     modelLoaded: boolean;
     cameraID: string;
     camera?: Camera;
+    brushOptions: BrushOptions;
+    handedness: "Right" | "Left";
 }
 
 export default {
     debug: true,
     mode: "menu",
     modelLoaded: false,
-    cameraID: ""
+    cameraID: "",
+    brushOptions: new BrushOptions(),
+    handedness: "Right"
 } as State;

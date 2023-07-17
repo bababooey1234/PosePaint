@@ -22,8 +22,8 @@ export default class {
         navigator.mediaDevices.getUserMedia(constraints).then(async (stream) => { // obtain camera stream resolution closest to 4K
             // get actual camera resolution and direction
             let settings = stream.getVideoTracks()[0].getSettings();
-            DOM.videoElement.width = DOM.flipCanvas.width = DOM.outputImage.width = settings.width!;
-            DOM.videoElement.height = DOM.flipCanvas.height = DOM.outputImage.height = settings.height!;
+            DOM.paintingCanvas.width = DOM.videoElement.width = DOM.flipCanvas.width = DOM.outputImage.width = settings.width!;
+            DOM.paintingCanvas.height = DOM.videoElement.height = DOM.flipCanvas.height = DOM.outputImage.height = settings.height!;
             UI.resizeCanvas();
             // if camera is a selfie camera, flip the canvas
             if(settings.facingMode != "environment") {
@@ -46,7 +46,8 @@ export default class {
                 } else {
                     DOM.flipCtx.drawImage(DOM.videoElement, 0, 0);
                 }
-                if(ApplicationState.mode == "painting") await ApplicationState.model.sendInput();
+                if(ApplicationState.mode == "painting")
+                    await ApplicationState.model.sendInput();
                 DOM.videoElement.requestVideoFrameCallback(_onFrame);
             }
             DOM.videoElement.requestVideoFrameCallback(_onFrame);

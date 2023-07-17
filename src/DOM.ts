@@ -12,5 +12,7 @@ export default {
     overlay: document.getElementById("overlay") as HTMLDivElement,
     selectCamera: document.getElementById("selectCamera") as HTMLSelectElement,
     noIDsWarning: document.getElementById("noidswarning") as HTMLDivElement,
-    btnAddIDs: document.getElementById("addIDs") as HTMLButtonElement
+    btnAddIDs: document.getElementById("addIDs") as HTMLButtonElement,
+    paintingCanvas: document.getElementById("paintingcanvas") as HTMLCanvasElement,
+    paintingCtx: (document.getElementById("paintingcanvas") as HTMLCanvasElement).getContext("2d")!
 }

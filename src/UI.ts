@@ -17,8 +17,8 @@ export default {
      * Change CSS properties to preserve aspect ratio while being centered
      */
     resizeCanvas: function() {
-        DOM.outputImage.style.width = `calc(${DOM.outputImage.width} * min(100vh / ${DOM.outputImage.height}, 100vw / ${DOM.outputImage.width}))`;
-        DOM.outputImage.style.height = `calc(${DOM.outputImage.height} * min(100vh / ${DOM.outputImage.height}, 100vw / ${DOM.outputImage.width}))`
+        DOM.paintingCanvas.style.width = DOM.outputImage.style.width = `calc(${DOM.outputImage.width} * min(100vh / ${DOM.outputImage.height}, 100vw / ${DOM.outputImage.width}))`;
+        DOM.paintingCanvas.style.height = DOM.outputImage.style.height = `calc(${DOM.outputImage.height} * min(100vh / ${DOM.outputImage.height}, 100vw / ${DOM.outputImage.width}))`
     },
     /**
      * Change the application's mode and show the overlay element, then find available cameras again

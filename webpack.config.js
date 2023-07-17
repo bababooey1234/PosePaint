@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+  devtool: 'eval-source-map',
   entry: './js/main.js',
   output: {
     filename: 'generated.js',
