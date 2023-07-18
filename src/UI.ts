@@ -106,12 +106,11 @@ export default {
             (colourWrapper.getElementsByClassName("alpha_slider")[0] as HTMLInputElement).oninput = (event: Event) => {
                 let val = (event.target as SelectEventTarget).value;
                 (colourWrapper.getElementsByClassName("colour_picker")[0] as HTMLInputElement).style.opacity = (parseInt(val)/255).toString();
-                ApplicationState.brushOptions.colours[index].RGBA[3] = parseInt(val);
+                ApplicationState.brushOptions.colours[index].alpha = parseInt(val);
             }
             (colourWrapper.getElementsByClassName("colour_picker")[0] as HTMLInputElement).oninput = (event: Event) => {
-                ApplicationState.brushOptions.colours[index].setColourString((event.target as SelectEventTarget).value);
+                ApplicationState.brushOptions.colours[index].hexstring = (event.target as SelectEventTarget).value;
             }
-            // (colourWrapper.getElementsByClassName("colour_picker")[0] as HTMLInputElement).value = ApplicationState.brushOptions.colours[ApplicationState.brushOptions.selectedColour].toString()
         });
     }
 }

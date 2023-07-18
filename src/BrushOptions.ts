@@ -9,7 +9,7 @@ export default class BrushOptions {
     constructor() {
         // update colour pickers in the menu from the default values given in the html
         [...DOM.coloursFlexbox.children].forEach((colourWrapper, index) => {
-            this.colours[index].setColourString((colourWrapper.getElementsByClassName("colour_picker")[0] as HTMLInputElement).value);
+            this.colours[index].hexstring = (colourWrapper.getElementsByClassName("colour_picker")[0] as HTMLInputElement).value;
         });
     }
 }
