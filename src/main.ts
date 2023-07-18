@@ -15,9 +15,7 @@ function onResults(results: Results) {
     if(toolHand != undefined) {
         ApplicationState.brushOptions.selectedColour = toolHand.nFingersUp - 1;
         if(toolHand.nFingersUp == 0) {
-            console.log(`${typeof ApplicationState.tool} ${typeof Eraser}`)
             if(ApplicationState.toolType == 'paintbrush') {
-                console.log("Applying null");
                 ApplicationState.tool.apply(null);
                 ApplicationState.tool = new Eraser();
             }
