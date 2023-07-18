@@ -13,6 +13,7 @@ type State = {
     camera?: Camera;
     brushOptions: BrushOptions;
     tool: Tool;
+    toolType: 'paintbrush' | 'eraser';
     handedness: "Right" | "Left";
     drawing: boolean;
 }
@@ -24,6 +25,7 @@ export default {
     cameraID: "",
     brushOptions: new BrushOptions(),
     tool: new Paintbrush(),
+    toolType: 'paintbrush',
     handedness: "Right",
     drawing: false
 } as State;

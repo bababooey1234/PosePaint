@@ -2,6 +2,8 @@ import ModelWrapper from "./ModelWrapper";
 import { Results } from "@mediapipe/hands";
 import UI from './UI';
 import ApplicationState from "./ApplicationState";
+import Paintbrush from "./Paintbrush";
+import Eraser from "./Eraser"
 
 // define actions taken when model produces results
 function onResults(results: Results) {
@@ -11,8 +13,21 @@ function onResults(results: Results) {
     let [toolHand, activeHand] = ApplicationState.model.interpretResults(results);
 
     if(toolHand != undefined) {
-        ApplicationState.brushOptions.selectedColour = toolHand.nFingersUp;
-        ApplicationState.model.drawNumberFingers(results, toolHand.nFingersUp);
+        ApplicationState.brushOptions.selectedColour = toolHand.nFingersUp - 1;
+        if(toolHand.nFingersUp == 0) {
+            console.log(`${typeof ApplicationState.tool} ${typeof Eraser}`)
+            if(ApplicationState.toolType == 'paintbrush') {
+                console.log("Applying null");
+                ApplicationState.tool.apply(null);
+                ApplicationState.tool = new Eraser();
+            }
+        } else {
+            ApplicationState.model.drawNumberFingers(results, toolHand.nFingersUp);
+            if(ApplicationState.toolType == 'eraser') {
+                ApplicationState.tool.apply(null);
+                ApplicationState.tool = new Paintbrush();
+            }
+        }
     }
     if(activeHand != undefined) {
         ApplicationState.model.drawPointerAt(results, activeHand.tipPosition);

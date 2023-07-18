@@ -64,7 +64,7 @@ export default class ModelWrapper {
     public drawNumberFingers(results: Results, nFingersUp: number): void {
         for(const [index, handedness] of results.multiHandedness.entries()) {
             if(handedness.label != ApplicationState.handedness) {
-                console.log(ApplicationState.brushOptions.colours);
+                //console.log(ApplicationState.brushOptions.colours);
                 DOM.outputCtx.fillStyle = ApplicationState.brushOptions.colours[ApplicationState.brushOptions.selectedColour].toString();
                 DOM.outputCtx.font = "bold 50px sans-serif";
                 DOM.outputCtx.fillText(nFingersUp.toString(), results.multiHandLandmarks[index][0].x*DOM.outputImage.width-25, results.multiHandLandmarks[index][0].y*DOM.outputImage.height)
