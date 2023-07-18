@@ -1,4 +1,5 @@
 import ApplicationState from "./ApplicationState";
+import BrushOptions from "./BrushOptions";
 import Camera from "./Camera";
 import DOM from "./DOM";
 
@@ -11,7 +12,9 @@ export default {
         DOM.btnOpenMenu.onclick = this.openMenu.bind(this);
         DOM.btnBegin.onclick = this.closeMenu;
         DOM.selectCamera.oninput = this.cameraSelected;
+        DOM.brushSizeRange.oninput = DOM.brushSizeBox.oninput = this.onBrushSizeChange;
         navigator.mediaDevices.enumerateDevices().then(this.gotDevices.bind(this));
+        this.setupColourPickers();
     },
     /**
      * Change CSS properties to preserve aspect ratio while being centered
@@ -88,7 +91,29 @@ export default {
      */
     cameraSelected: function(event: Event) {
         ApplicationState.cameraID = (event.target as SelectEventTarget).value;
+    },
+    /**
+     * Event listener for brush size change
+     */
+    onBrushSizeChange: function(event: Event) {
+        DOM.brushSizeBox.value = (ApplicationState.brushOptions.thickness = parseInt((event.target as SelectEventTarget).value)).toString();
+    },
+    /**
+     * Assigns listeners to each colour picker
+     */
+    setupColourPickers: function() {
+        [...DOM.coloursFlexbox.children].forEach((colourWrapper, index) => {
+            (colourWrapper.getElementsByClassName("alpha_slider")[0] as HTMLInputElement).oninput = (event: Event) => {
+                let val = (event.target as SelectEventTarget).value;
+                (colourWrapper.getElementsByClassName("colour_picker")[0] as HTMLInputElement).style.opacity = (parseInt(val)/255).toString();
+                ApplicationState.brushOptions.colours[index].RGBA[3] = parseInt(val);
+            }
+            (colourWrapper.getElementsByClassName("colour_picker")[0] as HTMLInputElement).oninput = (event: Event) => {
+                ApplicationState.brushOptions.colours[index].setColourString((event.target as SelectEventTarget).value);
+            }
+            // (colourWrapper.getElementsByClassName("colour_picker")[0] as HTMLInputElement).value = ApplicationState.brushOptions.colours[ApplicationState.brushOptions.selectedColour].toString()
+        });
     }
 }
-/** Helper type for cameraSelected function */
+/** Helper type for event listeners; asserts that they contain the value property */
 type SelectEventTarget = EventTarget & {value: string}

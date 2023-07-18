@@ -3,9 +3,22 @@ import Coords from "./Coords";
 
 export default class ActiveHand {
     tipPosition: Coords;
+    active: boolean;
     constructor(landmarks: LandmarkList) {
         this.tipPosition = landmarks[HandLandmarks.INDEX_FINGER_TIP];
+
+        //same as in ToolHand.ts, check if fingertip is within range of circle around palm
+        let circleCentre = {
+            x: (landmarks[0].x + landmarks[5].x + landmarks[17].x) / 3,
+            y: (landmarks[0].y + landmarks[5].y + landmarks[17].y) / 3
+        }
+        let circleRadius = distance(circleCentre, landmarks[0]) * 0.9; // again scaled by 90%
+        this.active = (distance(landmarks[HandLandmarks.INDEX_FINGER_TIP], circleCentre) > circleRadius) //only active if outside circle
     }
+}
+
+function distance(a: Coords, b: Coords): number {
+    return Math.sqrt((b.x-a.x)*(b.x-a.x) + (b.y-a.y)*(b.y-a.y))
 }
 
 const HandLandmarks = {

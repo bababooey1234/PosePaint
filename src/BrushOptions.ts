@@ -1,11 +1,15 @@
+import Colour from "./Colour";
+import DOM from "./DOM";
+
 export default class BrushOptions {
-    public colour: Uint8ClampedArray;
-    public thickness: number;
+    public thickness = 5;
+    public colours = [new Colour(), new Colour(), new Colour(), new Colour(), new Colour()];
+    public selectedColour = 0;
+    
     constructor() {
-        this.colour = new Uint8ClampedArray(4);
-        this.thickness = 5;
-    }
-    public colourAsString(): string {
-        return '#' + this.colour[0].toString(16) + this.colour[1].toString(16) + this.colour[2].toString(16) + this.colour[3].toString(16);
+        // update colour pickers in the menu from the default values given in the html
+        [...DOM.coloursFlexbox.children].forEach((colourWrapper, index) => {
+            this.colours[index].setColourString((colourWrapper.getElementsByClassName("colour_picker")[0] as HTMLInputElement).value);
+        });
     }
 }

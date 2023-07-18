@@ -14,5 +14,8 @@ export default {
     noIDsWarning: document.getElementById("noidswarning") as HTMLDivElement,
     btnAddIDs: document.getElementById("addIDs") as HTMLButtonElement,
     paintingCanvas: document.getElementById("paintingcanvas") as HTMLCanvasElement,
-    paintingCtx: (document.getElementById("paintingcanvas") as HTMLCanvasElement).getContext("2d")!
+    paintingCtx: (document.getElementById("paintingcanvas") as HTMLCanvasElement).getContext("2d")!,
+    brushSizeRange: document.getElementById("brushsizerange") as HTMLInputElement,
+    brushSizeBox: document.getElementById("brushsizebox") as HTMLInputElement,
+    coloursFlexbox: document.getElementById("colours_flexbox") as HTMLDivElement
 }

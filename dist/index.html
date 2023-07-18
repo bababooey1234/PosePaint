@@ -52,6 +52,41 @@
                 margin: 5px;
                 padding: 5px
             }
+            #brushsizeflexbox {
+                display: flex;
+            }
+            #brushsizerange {
+                flex: 90% /* Take up 90% of the available horizontal space */
+            }
+            #brushsizebox {
+                flex: 10%; /* Take up the other 10% of horizontal space */
+                min-width: 3em; /* At minimum, fit 3 characters of width */
+            }
+            #brushsizelabel {
+                display: flex;
+                justify-content: center; /* centre the label */
+            }
+
+            /* 5 colour pickers and alpha sliders */
+            #colours_label {
+                display: flex;
+                justify-content: center; /* centre the label */
+            }
+            #colours_flexbox {
+                display: flex; /* make a flexbox (responsive) */
+            }
+            div.colour_wrapper {
+                margin: 5px;
+                flex: 20%; /* take up 20% of the available space */
+            }
+            input.colour_picker {
+                height: 2rem;
+                width: 2rem;
+                box-sizing: border-box; /* include width and height in the border */
+            }
+            input.alpha_slider {
+                width: 100%; /* take up exactly 100% of the available space, no more no less */
+            }
         </style>
     </head>
 
@@ -67,6 +102,38 @@
                 <div id="noidswarning">
                     <span>Warning: browser is blocking access to webcam IDs, so not all webcams will be shown and their names are unknown.</span><br>
                     <button id="addIDs">Click to allow access</button>
+                </div>
+                <br>
+                <!------------------  Brush Size  -------------------->
+                <label for="brushsizeflexbox" id="brushsizelabel">Brush Size (px)</label>
+                <div id="brushsizeflexbox">
+                    <input type="range" min="0" max="100" value="10" id="brushsizerange">
+                    <input type="number" min="0" value="10" id="brushsizebox">
+                </div>
+                <br>
+                <!-------------------  Colours  ---------------------->
+                <label for="colours_flexbox" id="colours_label">Colours (RGBA)</label>
+                <div id="colours_flexbox">
+                    <div class="colour_wrapper">
+                        <input class="colour_picker" type="color" value="#FF0000">
+                        <input class="alpha_slider" type="range" min="0" max="255" step="1" value="255">
+                    </div>
+                    <div class="colour_wrapper">
+                        <input class="colour_picker" type="color" value="#00FF00">
+                        <input class="alpha_slider" type="range" min="0" max="255" step="1" value="255">
+                    </div>
+                    <div class="colour_wrapper">
+                        <input class="colour_picker" type="color" value="#0000FF">
+                        <input class="alpha_slider" type="range" min="0" max="255" step="1" value="255">
+                    </div>
+                    <div class="colour_wrapper">
+                        <input class="colour_picker" type="color" value="#FF00FF">
+                        <input class="alpha_slider" type="range" min="0" max="255" step="1" value="255">
+                    </div>
+                    <div class="colour_wrapper">
+                        <input class="colour_picker" type="color" value="#FFFF00">
+                        <input class="alpha_slider" type="range" min="0" max="255" step="1" value="255">
+                    </div>
                 </div>
                 <button id="btnBegin">Close Menu</button>
             </div>

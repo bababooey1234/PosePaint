@@ -57,14 +57,6 @@ export default class ModelWrapper {
                     }
                 }
             }
-            // if in debug mode, show which hand is which
-            /*if(ApplicationState.debug) {
-                for(const [index, handedness] of results.multiHandedness.entries()) {
-                    DOM.outputCtx.fillStyle = "red";
-                    DOM.outputCtx.font = "50px sans-serif";
-                    DOM.outputCtx.fillText(handedness.label, results.multiHandLandmarks[index][0].x*DOM.outputImage.width-25, results.multiHandLandmarks[index][0].y*DOM.outputImage.height)
-                }
-            }*/
         }
         DOM.outputCtx.restore();
     }
@@ -72,8 +64,9 @@ export default class ModelWrapper {
     public drawNumberFingers(results: Results, nFingersUp: number): void {
         for(const [index, handedness] of results.multiHandedness.entries()) {
             if(handedness.label != ApplicationState.handedness) {
-                DOM.outputCtx.fillStyle = "red";
-                DOM.outputCtx.font = "50px sans-serif";
+                console.log(ApplicationState.brushOptions.colours);
+                DOM.outputCtx.fillStyle = ApplicationState.brushOptions.colours[ApplicationState.brushOptions.selectedColour].toString();
+                DOM.outputCtx.font = "bold 50px sans-serif";
                 DOM.outputCtx.fillText(nFingersUp.toString(), results.multiHandLandmarks[index][0].x*DOM.outputImage.width-25, results.multiHandLandmarks[index][0].y*DOM.outputImage.height)
             }
         }

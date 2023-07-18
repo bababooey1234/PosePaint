@@ -20,22 +20,6 @@ export default class ToolHand {
         if(landmarks[HandLandmarks.PINKY_TIP].y < landmarks[HandLandmarks.PINKY_MCP].y)
             this.nFingersUp++;
 
-        /*//approximate centroid (centre of mass) of the line from the wrist to the thumb
-        let centroid = [0, 1, 2, 3, 4].reduce((accumulator: any, value: number) => {
-            return {
-                x: accumulator.x + landmarks[value].x / 5,
-                y: accumulator.y + landmarks[value].y / 5,
-                z: accumulator.z + landmarks[value].z / 5
-            } as Landmark;
-        }, {x: 0, y: 0, z: 0});
-        let length1 = distance(landmarks[HandLandmarks.THUMB_TIP], centroid) + distance(centroid, landmarks[HandLandmarks.WRIST]);
-        let length2 = 0;
-        for(let i = 0; i < 4; i++) {
-            length2 += distance(landmarks[i], landmarks[i+1]);
-        }
-        
-        if (length2 / length1 > 0.8)
-            this.nFingersUp++;*/
         // check if thumtip (4) is within the circumcircle of the triangle 0-5-17
         let circleCentre = {
             x: (landmarks[0].x + landmarks[5].x + landmarks[17].x) / 3,

@@ -13,20 +13,24 @@ export default class Paintbrush implements Tool {
             this.lastApplied = location;
             return;
         }
+        location.x *= 1280;
+        location.y *= 720;
         // begin drawing
         DOM.paintingCtx.beginPath();
         if(this.lastApplied != null) {
             // if lastApplied exists, draw a straight line between
             DOM.paintingCtx.moveTo(this.lastApplied.x, this.lastApplied.y);
             DOM.paintingCtx.lineTo(location.x, location.y);
-            DOM.paintingCtx.strokeStyle = ApplicationState.brushOptions.colourAsString();
+            DOM.paintingCtx.strokeStyle = ApplicationState.brushOptions.colours[ApplicationState.brushOptions.selectedColour].toString();
+            console.log(ApplicationState.brushOptions.colours[ApplicationState.brushOptions.selectedColour].toString());
+            console.log(DOM.paintingCtx.strokeStyle)
+            DOM.paintingCtx.lineWidth = ApplicationState.brushOptions.thickness;
             DOM.paintingCtx.stroke();
-        } else {
-            // else, just draw a circle at location
-            DOM.paintingCtx.arc(location.x, location.y, ApplicationState.brushOptions.thickness / 2, 0, 2*Math.PI);
-            DOM.paintingCtx.fillStyle = ApplicationState.brushOptions.colourAsString();
-            DOM.paintingCtx.fill();
         }
+        // draw a circle at location
+        DOM.paintingCtx.arc(location.x, location.y, ApplicationState.brushOptions.thickness / 2, 0, 2*Math.PI);
+        DOM.paintingCtx.fillStyle = ApplicationState.brushOptions.colours[ApplicationState.brushOptions.selectedColour].toString();
+        DOM.paintingCtx.fill();
         // update lastApplied property
         this.lastApplied = location;
     }
