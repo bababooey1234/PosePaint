@@ -2,6 +2,7 @@ import Coords from "./Coords";
 import Tool from "./Tool";
 import DOM from "./DOM";
 import ApplicationState from "./ApplicationState";
+import UI from "./UI";
 
 export default class Eraser implements Tool {
     
@@ -16,8 +17,8 @@ export default class Eraser implements Tool {
             this.lastApplied = null;
             return;
         }
-        location.x *= 1280;
-        location.y *= 720;
+        
+        UI.convertToCanvasSpace(location);
 
         DOM.paintingCtx.save();
         // Same code as in Paintbrush.ts, but this line will make it so that anything added is removed

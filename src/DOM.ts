@@ -18,5 +18,6 @@ export default {
     brushSizeRange: document.getElementById("brushsizerange") as HTMLInputElement,
     brushSizeBox: document.getElementById("brushsizebox") as HTMLInputElement,
     coloursFlexbox: document.getElementById("colours_flexbox") as HTMLDivElement,
-    btnDownload: document.getElementById("btnDownload") as HTMLButtonElement
+    btnDownload: document.getElementById("btnDownload") as HTMLButtonElement,
+    imgInput: document.getElementById("imginput") as HTMLInputElement
 }

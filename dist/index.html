@@ -91,10 +91,15 @@
     </head>
 
     <body>
+        <!-- Hidden, needed to get video frames -->
         <video id="inputvideo"></video>
+        <!-- Hidden, needed to flip the input stream if needed -->
         <canvas id="flipcanvas"></canvas>
+        <!-- Shown, includes video stream, hand skeletons, selected colour etc. -->
         <canvas id="outputimage"></canvas>
-        <canvas id="paintingcanvas"></canvas>
+        <!-- Shown, only includes user input. Default size 0x0 to show it is uninitialised -->
+        <canvas id="paintingcanvas" width="0" height="0"></canvas>
+        <!-- Menu -->
         <div id="overlay">
             <div id="panel">
                 <!-- Camera selecter + Error box if no camera permissions -->
@@ -104,7 +109,7 @@
                     <button id="addIDs">Click to allow access</button>
                 </div>
                 <!-- File input and output -->
-                <input type="file" id="imgInput" accept="image/*">
+                <input type="file" id="imginput" accept="image/*">
                 <button id="btnDownload">Download Image</button>
                 <br>
                 <!------------------  Brush Size  -------------------->
@@ -141,6 +146,7 @@
                 <button id="btnBegin">Close Menu</button>
             </div>
         </div>
-        <!--testing only--><button style="position: absolute; top: 97vh; left: 0" id="testopenmenu">Open Menu</button>
+        <!-- Button to open the menu -->
+        <button style="position: absolute; top: 97vh; left: 0" id="testopenmenu">Open Menu</button>
     </body>
 </html>

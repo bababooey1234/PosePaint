@@ -24,10 +24,13 @@ export default class {
             let settings = stream.getVideoTracks()[0].getSettings();
             DOM.videoElement.width = DOM.flipCanvas.width = DOM.outputImage.width = settings.width!;
             DOM.videoElement.height = DOM.flipCanvas.height = DOM.outputImage.height = settings.height!;
-            if(DOM.paintingCanvas.width != settings.width)
+            // if the user has not uploaded an image, set the painting canvas to be the same size as the input video
+            // must not be done twice or the canvas will be reset
+            if(DOM.paintingCanvas.width == 0 && DOM.paintingCanvas.height == 0) {
                 DOM.paintingCanvas.width = settings.width!;
-            if(DOM.paintingCanvas.height != settings.height)
                 DOM.paintingCanvas.height = settings.height!;
+            }
+            // visually resize canvas to fit in front of camera
             UI.resizeCanvas();
 
             // if camera is a selfie camera, flip the canvas

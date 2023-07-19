@@ -2,6 +2,7 @@ import ApplicationState from "./ApplicationState";
 import Coords from "./Coords";
 import DOM from "./DOM";
 import Tool from "./Tool";
+import UI from "./UI";
 
 export default class Paintbrush implements Tool {
     
@@ -21,9 +22,10 @@ export default class Paintbrush implements Tool {
             this.lastApplied = location;
             return;
         }
-        location.x *= 1280;
-        location.y *= 720;
-        // begin drawing
+
+        UI.convertToCanvasSpace(location);
+        
+        // begin drawing    
         DOM.paintingCtx.beginPath();
         if(this.lastApplied != null) {
             // if lastApplied exists, draw a straight line between

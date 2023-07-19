@@ -1,6 +1,7 @@
 import ApplicationState from "./ApplicationState";
 import BrushOptions from "./BrushOptions";
 import Camera from "./Camera";
+import Coords from "./Coords";
 import DOM from "./DOM";
 
 export default {
@@ -8,12 +9,12 @@ export default {
      * Initialise the UI by resizing appropriately, adding event listeners, and finding available cameras
      */
     init: function() {
-        this.resizeCanvas();
         DOM.btnOpenMenu.onclick = this.openMenu.bind(this);
         DOM.btnBegin.onclick = this.closeMenu;
         DOM.selectCamera.oninput = this.cameraSelected;
         DOM.brushSizeRange.oninput = DOM.brushSizeBox.oninput = this.onBrushSizeChange;
         DOM.btnDownload.onclick = this.download;
+        DOM.imgInput.onchange = this.onFileUploaded;
         navigator.mediaDevices.enumerateDevices().then(this.gotDevices.bind(this));
         this.setupColourPickers();
     },
@@ -21,8 +22,14 @@ export default {
      * Change CSS properties to preserve aspect ratio while being centered
      */
     resizeCanvas: function() {
-        DOM.paintingCanvas.style.width = DOM.outputImage.style.width = `calc(${DOM.outputImage.width} * min(100vh / ${DOM.outputImage.height}, 100vw / ${DOM.outputImage.width}))`;
-        DOM.paintingCanvas.style.height = DOM.outputImage.style.height = `calc(${DOM.outputImage.height} * min(100vh / ${DOM.outputImage.height}, 100vw / ${DOM.outputImage.width}))`
+        // make camera take up as much space as possible while preserving aspect ratio
+        // scaling factor calculated and multiplied by both to ensure same ratio
+        DOM.outputImage.style.width = `calc(${DOM.outputImage.width} * min(100vh / ${DOM.outputImage.height}, 100vw / ${DOM.outputImage.width}))`;
+        DOM.outputImage.style.height = `calc(${DOM.outputImage.height} * min(100vh / ${DOM.outputImage.height}, 100vw / ${DOM.outputImage.width}))`
+        // make painting canvas take up as much space as possible WITHIN THE CAMERA while preserving aspect ratio
+        // basically the same but using the above properties instead of 100vh and 100vw to represent the maximum boundaries
+        DOM.paintingCanvas.style.width = `calc(${DOM.paintingCanvas.width} * min(${DOM.outputImage.style.height} / ${DOM.paintingCanvas.height}, ${DOM.outputImage.style.width} / ${DOM.paintingCanvas.width}))`;
+        DOM.paintingCanvas.style.height = `calc(${DOM.paintingCanvas.height} * min(${DOM.outputImage.style.height} / ${DOM.paintingCanvas.height}, ${DOM.outputImage.style.width} / ${DOM.paintingCanvas.width}))`;
     },
     /**
      * Change the application's mode and show the overlay element, then find available cameras again
@@ -123,7 +130,42 @@ export default {
         link.download = 'PosePaintSave.png';
         link.href = DOM.paintingCanvas.toDataURL('image/png');
         link.click();
+    },
+    /**
+     * Converts location from 0 to 1 into a location on the scaled painting canvas
+     * Moved here to avoid redundancy
+     */
+    convertToCanvasSpace: function(location: Coords) {
+        if(DOM.outputImage.width / DOM.outputImage.height >= DOM.paintingCanvas.width / DOM.paintingCanvas.height) {
+            location.y *= DOM.paintingCanvas.height;
+            location.x *= DOM.outputImage.width * (DOM.paintingCanvas.height / DOM.outputImage.height);
+            location.x -= (DOM.outputImage.width * (DOM.paintingCanvas.height / DOM.outputImage.height) - DOM.paintingCanvas.width) / 2;
+        } else {
+            location.x *= DOM.paintingCanvas.width;
+            location.y *= DOM.outputImage.height * (DOM.paintingCanvas.width / DOM.outputImage.width);
+            location.y -= (DOM.outputImage.height * (DOM.paintingCanvas.width / DOM.outputImage.width) - DOM.paintingCanvas.height) / 2;
+        }
+    },
+    /**
+     * Event listener for file picker
+     */
+    onFileUploaded: function(event: Event) {
+        //yoinked from https://stackoverflow.com/questions/10906734/how-to-upload-image-into-html5-canvas
+        let reader = new FileReader();
+        reader.onload = (event) => {
+            let img = new Image();
+            img.onload = () => {
+                DOM.paintingCanvas.width = img.width;
+                DOM.paintingCanvas.height = img.height;
+                DOM.paintingCtx.drawImage(img, 0, 0);
+                this.resizeCanvas;
+            }
+            img.src = event.target!.result as string;
+        }
+        reader.readAsDataURL((event.target as FileEventTarget).files[0]);
+        //console.log((event.target as FileEventTarget).files[0]);
     }
 }
-/** Helper type for event listeners; asserts that they contain the value property */
+/** Helper types for event listeners; asserts that they contain the value property */
 type SelectEventTarget = EventTarget & {value: string}
+type FileEventTarget = EventTarget & {files: FileList}
