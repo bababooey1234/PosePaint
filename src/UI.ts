@@ -16,6 +16,7 @@ export default {
         DOM.btnDownload.onclick = this.download;
         DOM.imgInput.onchange = this.onFileUploaded;
         DOM.radioRight.onchange = DOM.radioLeft.onchange = this.onHandednessChange;
+        DOM.btnResetCanvas.onclick = this.onCanvasReset;
         navigator.mediaDevices.enumerateDevices().then(this.gotDevices.bind(this));
         this.setupColourPickers();
     },
@@ -178,6 +179,14 @@ export default {
     onHandednessChange: function(event: Event) {
         // type-casted to tell typescript the allowable values
         ApplicationState.handedness = (event.target as (EventTarget & {value: "Right" | "Left"})).value;
+    },
+    /**
+     * Event handler for reset button
+     */
+    onCanvasReset: function(event: Event) {
+        // simply reset the width and height to default to clear the whole canvas
+        DOM.paintingCanvas.width = DOM.outputImage.width;
+        DOM.paintingCanvas.height = DOM.outputImage.height;
     }
 }
 /** Helper types for event listeners; asserts that they contain the value property */

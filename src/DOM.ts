@@ -21,5 +21,6 @@ export default {
     btnDownload: document.getElementById("btnDownload") as HTMLButtonElement,
     imgInput: document.getElementById("imginput") as HTMLInputElement,
     radioRight: document.getElementById("righthanded") as HTMLInputElement,
-    radioLeft: document. getElementById("lefthanded") as HTMLInputElement
+    radioLeft: document.getElementById("lefthanded") as HTMLInputElement,
+    btnResetCanvas: document.getElementById("btnResetCanvas") as HTMLButtonElement
 }
