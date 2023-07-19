@@ -89,9 +89,11 @@ export default {
             navigator.mediaDevices.getUserMedia({audio: false, video: true}).then((stream: MediaStream) => {
                 // have to stop tracks because we are discarding the result
                 stream.getTracks().forEach(track => track.stop());
-                // we now have permission, so re-run the gotDevices function
-                DOM.noIDsWarning.style.display = "none"; // hide warning
-                navigator.mediaDevices.enumerateDevices().then(this.gotDevices);
+                // we now have permission, so reload the page
+                location.reload();
+            }).catch(() => {
+                // error probably means access has been granted, so reload
+                location.reload();
             });
         };
     },
