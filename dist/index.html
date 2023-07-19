@@ -10,7 +10,7 @@
         <link rel="icon" type="image/x-icon" href="favicon.ico">
 
         <!-- Load title font (Sigmar) -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.googleapis.com"> <!-- Preconnect makes all requests to this domain faster -->
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Sigmar&display=swap" rel="stylesheet">
         
@@ -22,12 +22,14 @@
 
         <!-- Styling for the whole application -->
         <style>
+            /* Hide these */
             #inputvideo {
                 display: none;
             }
             #flipcanvas {
                 display: none;
             }
+            /* Ensure these are centred and no interpolation is used, just plain scaling */
             #outputimage, #paintingcanvas {
                 image-rendering: pixelated;
                 /* centering, from https://stackoverflow.com/a/40167175 */
@@ -38,13 +40,16 @@
                 top: 0;
                 bottom: 0;
             }
+            /* Make canvas slightly see-through */
             #paintingcanvas {
                 opacity: 0.8;
             }
+            /* Set font and margins for the whole page */
             body {
                 font-family: 'Open Sans', sans-serif;
                 margin: 0;
             }
+            /* White overlate that fades in - make the fade take 1 second, and it cover the whole screen */
             #overlay {
                 display: inline;
                 opacity: 1;
@@ -56,6 +61,7 @@
                 width: 100vw;
                 height: 100vh;
             }
+            /* Menu panel - taking up 2/3 of the screen */
             #panel {
                 background-color: white;
                 border: solid black 2px;
@@ -67,6 +73,7 @@
                 padding: 5px;
                 line-height: 1;
             }
+            /* Make error box red to convey urgentness */
             #noidswarning {
                 display: none;
                 background-color: lightcoral;
@@ -74,6 +81,7 @@
                 margin: 5px;
                 padding: 5px
             }
+            /* Container for the brush size range+slider */
             #brushsizeflexbox {
                 display: flex;
             }
@@ -109,6 +117,8 @@
             input.alpha_slider {
                 width: 100%; /* take up exactly 100% of the available space, no more no less */
             }
+
+            /* Make title be Sigmar with light grey background */
             #title {
                 display: flex;
                 justify-content: center;
@@ -128,16 +138,18 @@
                 font-family: 'Sigmar', cursive;
                 font-size: 16pt;
                 display: flex;
-                margin: auto;
+                margin: auto; /* centres it */
             }
             #menuflexbox {
                 display: flex;
                 flex-direction: column;
-                align-content: space-around;
+                align-content: space-around; /* Spaces them nicely */
             }
+            /* remove annoying margins on the p tag */
             p {
                 margin: 0;
             }
+            /* centre the help link */
             a {
                 display: flex;
                 justify-content: center;
@@ -155,9 +167,9 @@
         <!-- Shown, only includes user input. Default size 0x0 to show it is uninitialised -->
         <canvas id="paintingcanvas" width="0" height="0"></canvas>
         <!-- Menu -->
-        <div id="overlay">
-            <div id="panel">
-                <div id="title">
+        <div id="overlay"> <!-- Transparent white background -->
+            <div id="panel"> <!-- Pop-up panel -->
+                <div id="title"> <!-- Colourful title -->
                     <span style="color: #ff0000;">P</span>
                     <span style="color: #ff4000;">o</span>
                     <span style="color: #ff7f00;">s</span>
