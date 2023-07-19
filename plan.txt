@@ -1,3 +1,6 @@
-4. Add dl
-5. Add ul
-7. Improve documentation
+1. Final touches - Handedness switch, Logo, UL, DL, anything else in storyboard, removing 1280x720 dependency
+2. User Guide and Installation - Comprehensive detail on how to use the application with 2 or more screenshots, very detailed installation instructions, very detailed help guide with troubleshooting (e.g. cameras not shown)
+3. Adding comments to code + online help?
+4. Logbook - Detailed logbook spanning the whole project, Dates and time spent on components clearly shown, Shows sufficient problems encountered and how they were solved including code snippets, length N+1
+
+Canvas isn't staying the same - why? Camera.ts was changing the width, which resets the canvas even if the width is the same. Fixed by adding check for if the width is actually changing.

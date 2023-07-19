@@ -13,6 +13,7 @@ export default {
         DOM.btnBegin.onclick = this.closeMenu;
         DOM.selectCamera.oninput = this.cameraSelected;
         DOM.brushSizeRange.oninput = DOM.brushSizeBox.oninput = this.onBrushSizeChange;
+        DOM.btnDownload.onclick = this.download;
         navigator.mediaDevices.enumerateDevices().then(this.gotDevices.bind(this));
         this.setupColourPickers();
     },
@@ -112,6 +113,16 @@ export default {
                 ApplicationState.brushOptions.colours[index].hexstring = (event.target as SelectEventTarget).value;
             }
         });
+    },
+    /**
+     * Downloads image to user device as PosePaintSave.png
+     * Adapted from Source: https://stackoverflow.com/a/50300880/13717363
+     */
+    download: function() {
+        let link = document.createElement('a');
+        link.download = 'PosePaintSave.png';
+        link.href = DOM.paintingCanvas.toDataURL('image/png');
+        link.click();
     }
 }
 /** Helper type for event listeners; asserts that they contain the value property */

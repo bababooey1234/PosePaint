@@ -22,19 +22,26 @@ export default class {
         navigator.mediaDevices.getUserMedia(constraints).then(async (stream) => { // obtain camera stream resolution closest to 4K
             // get actual camera resolution and direction
             let settings = stream.getVideoTracks()[0].getSettings();
-            DOM.paintingCanvas.width = DOM.videoElement.width = DOM.flipCanvas.width = DOM.outputImage.width = settings.width!;
-            DOM.paintingCanvas.height = DOM.videoElement.height = DOM.flipCanvas.height = DOM.outputImage.height = settings.height!;
+            DOM.videoElement.width = DOM.flipCanvas.width = DOM.outputImage.width = settings.width!;
+            DOM.videoElement.height = DOM.flipCanvas.height = DOM.outputImage.height = settings.height!;
+            if(DOM.paintingCanvas.width != settings.width)
+                DOM.paintingCanvas.width = settings.width!;
+            if(DOM.paintingCanvas.height != settings.height)
+                DOM.paintingCanvas.height = settings.height!;
             UI.resizeCanvas();
+
             // if camera is a selfie camera, flip the canvas
             if(settings.facingMode != "environment") {
-                //took fucking ages to figure this out. Flips outputContext horizontally
+                //took fucking ages to figure this out. Flips outputContext horizontally by moving it, scaling it, and moving it back
                 DOM.flipCtx.translate(DOM.flipCanvas.width/2, DOM.flipCanvas.height/2);
                 DOM.flipCtx.scale(-1,1);
                 DOM.flipCtx.translate(-DOM.flipCanvas.width/2,-DOM.flipCanvas.height/2);
             }
+
             // play stream through hidden video element
             DOM.videoElement.srcObject = this.currentStream = stream;
             await DOM.videoElement.play();
+
             // every frame of the camera, send frame to model, then request the next frame
             const _onFrame = async () => {
                 if(!ApplicationState.modelLoaded) {
@@ -48,8 +55,9 @@ export default class {
                 }
                 if(ApplicationState.mode == "painting")
                     await ApplicationState.model.sendInput();
-                DOM.videoElement.requestVideoFrameCallback(_onFrame);
+                DOM.videoElement.requestVideoFrameCallback(_onFrame); // request the next frame, ONLY after all processing is done
             }
+            // start requesting frames
             DOM.videoElement.requestVideoFrameCallback(_onFrame);
         })
         .catch((error) => {

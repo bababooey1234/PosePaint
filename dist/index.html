@@ -97,12 +97,15 @@
         <canvas id="paintingcanvas"></canvas>
         <div id="overlay">
             <div id="panel">
-                <input type="file" id="imgInput" accept="image/*">
+                <!-- Camera selecter + Error box if no camera permissions -->
                 <select id="selectCamera"></select>
                 <div id="noidswarning">
                     <span>Warning: browser is blocking access to webcam IDs, so not all webcams will be shown and their names are unknown.</span><br>
                     <button id="addIDs">Click to allow access</button>
                 </div>
+                <!-- File input and output -->
+                <input type="file" id="imgInput" accept="image/*">
+                <button id="btnDownload">Download Image</button>
                 <br>
                 <!------------------  Brush Size  -------------------->
                 <label for="brushsizeflexbox" id="brushsizelabel">Brush Size (px)</label>

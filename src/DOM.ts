@@ -17,5 +17,6 @@ export default {
     paintingCtx: (document.getElementById("paintingcanvas") as HTMLCanvasElement).getContext("2d")!,
     brushSizeRange: document.getElementById("brushsizerange") as HTMLInputElement,
     brushSizeBox: document.getElementById("brushsizebox") as HTMLInputElement,
-    coloursFlexbox: document.getElementById("colours_flexbox") as HTMLDivElement
+    coloursFlexbox: document.getElementById("colours_flexbox") as HTMLDivElement,
+    btnDownload: document.getElementById("btnDownload") as HTMLButtonElement
 }
