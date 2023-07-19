@@ -2,8 +2,11 @@ import UI from "./UI";
 import DOM from "./DOM";
 import ApplicationState from "./ApplicationState";
 
+/**
+ * Everything camera-related
+ */
 export default class {
-    private currentStream?: MediaStream = undefined;
+    private currentStream?: MediaStream = undefined; // only zero or one streams may be active at once
     /**
      * Construct a Camera object and start processing frames.
      * If mode is painting, send frames to model before requesting next frame.
@@ -14,12 +17,12 @@ export default class {
         const constraints: MediaStreamConstraints = {
             audio: false,
             video: {
-                width: {ideal: 4096},
+                width: {ideal: 4096}, // https://stackoverflow.com/a/48546227/13717363
                 height: {ideal: 2160},
                 deviceId: deviceId == "" ? undefined : {exact: deviceId}// if an ID is selected, use it, otherwise leave undefined
             }
         };
-        navigator.mediaDevices.getUserMedia(constraints).then(async (stream) => { // obtain camera stream resolution closest to 4K
+        navigator.mediaDevices.getUserMedia(constraints).then(async (stream) => { // obtain camera stream resolution closest to 4K, then
             // get actual camera resolution and direction
             let settings = stream.getVideoTracks()[0].getSettings();
             DOM.videoElement.width = DOM.flipCanvas.width = DOM.outputImage.width = settings.width!;
@@ -48,12 +51,14 @@ export default class {
             // every frame of the camera, send frame to model, then request the next frame
             const _onFrame = async () => {
                 if(!ApplicationState.modelLoaded) {
+                    // first time running
                     ApplicationState.modelLoaded = true;
                     // paint loading screen
                     let img = new Image();
                         img.onload = () => DOM.outputCtx.drawImage(img, 0, 0, DOM.outputImage.width, DOM.outputImage.height);
                     img.src = "loading.png";
                 } else {
+                    // every subsequent time
                     DOM.flipCtx.drawImage(DOM.videoElement, 0, 0);
                 }
                 if(ApplicationState.mode == "painting")
@@ -69,7 +74,8 @@ export default class {
         });
     }
     /**
-     * Destroy Camera object by stopping all tracks
+     * Destroy Camera object by stopping all tracks.
+     * Otherwise, camera may stay in use and other applications will not be able to use it
      */
     public destroy(): void {
         this.currentStream?.getTracks().forEach(track => track.stop())

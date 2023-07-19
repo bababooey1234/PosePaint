@@ -4,6 +4,9 @@ import DOM from "./DOM";
 import ApplicationState from "./ApplicationState";
 import UI from "./UI";
 
+/**
+ * Tool to erase a given area
+ */
 export default class Eraser implements Tool {
     
     lastApplied: Coords | null = null;
@@ -13,7 +16,7 @@ export default class Eraser implements Tool {
     }
 
     public apply(location: Coords | null): void {
-        if(location == null) {
+        if(location == null) { // if applied nowhere, clear the lastApplied value and return
             this.lastApplied = null;
             return;
         }
@@ -39,6 +42,7 @@ export default class Eraser implements Tool {
         DOM.paintingCtx.fill();
         // update lastApplied property
         this.lastApplied = location;
+        
         DOM.paintingCtx.restore();
     }
 }

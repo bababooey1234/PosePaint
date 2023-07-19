@@ -4,13 +4,8 @@ import Coords from "./Coords";
 export default class ToolHand {
     nFingersUp: number = 0;
     constructor(landmarks: LandmarkList) {
-        /*
-            Nvm, Erin gave me a better idea. I wanted to measure the straightness of the hand, but I can just check whether the y-values
-            of each fingertip are greater than the value of their correspohnding hand-point.
-            Only issue: what do I do for the thumb? Distance? Straightness?
-
-            Straightness using distance between approximation of centroid and endpoints 
-        */
+        // Check whether the y-values of each fingertip are greater than the value of their corresponding hand-point (MCP).
+        // Not for thumb.
         if(landmarks[HandLandmarks.INDEX_FINGER_TIP].y < landmarks[HandLandmarks.INDEX_FINGER_MCP].y)
             this.nFingersUp++;
         if(landmarks[HandLandmarks.MIDDLE_FINGER_TIP].y < landmarks[HandLandmarks.MIDDLE_FINGER_MCP].y)
@@ -20,21 +15,28 @@ export default class ToolHand {
         if(landmarks[HandLandmarks.PINKY_TIP].y < landmarks[HandLandmarks.PINKY_MCP].y)
             this.nFingersUp++;
 
-        // check if thumtip (4) is within the circumcircle of the triangle 0-5-17
-        let circleCentre = {
+        // check if thumtip is within the circumcircle of the triangle 0-5-17 (scaled down a bit)
+        let circleCentre = { // average of the 3 landmarks
             x: (landmarks[0].x + landmarks[5].x + landmarks[17].x) / 3,
             y: (landmarks[0].y + landmarks[5].y + landmarks[17].y) / 3
         }
+        // radius is the distance to any one landmark, wrist chosen
         let circleRadius = distance(circleCentre, landmarks[0]) * 0.9; // was too large, reduced to 90%
         if(distance(landmarks[HandLandmarks.THUMB_TIP], circleCentre) > circleRadius)
             this.nFingersUp++;
     }
 }
 
+/**
+ * Helper function; just pythagoras' formula
+ */
 function distance(a: Coords, b: Coords): number {
     return Math.sqrt((b.x-a.x)*(b.x-a.x) + (b.y-a.y)*(b.y-a.y))
 }
 
+/**
+ * Helper object to reference positions by their names
+ */
 const HandLandmarks = {
     WRIST : 0,
     THUMB_CMC : 1,

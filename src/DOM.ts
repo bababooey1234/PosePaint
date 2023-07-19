@@ -1,5 +1,6 @@
 /**
- * Helper object, grabs all needed elements from the DOM and asserts that they are not null
+ * Helper object, grabs all needed elements from the DOM and asserts that they are not null.
+ * (DOM stands for Domain Object Model, basically the HTML)
  */
 export default {
     videoElement: document.getElementById("inputvideo") as HTMLVideoElement,

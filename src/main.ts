@@ -5,6 +5,8 @@ import ApplicationState from "./ApplicationState";
 import Paintbrush from "./Paintbrush";
 import Eraser from "./Eraser"
 
+// Entry point for the entire application
+
 // define actions taken when model produces results
 function onResults(results: Results) {
     // draw the hand-skeleton
@@ -12,30 +14,32 @@ function onResults(results: Results) {
     // find properties of each hand, if they exist
     let [toolHand, activeHand] = ApplicationState.model.interpretResults(results);
 
+    // If the tool hand is within the frame
     if(toolHand != undefined) {
-        ApplicationState.brushOptions.selectedColour = toolHand.nFingersUp - 1;
-        if(toolHand.nFingersUp == 0) {
-            if(ApplicationState.toolType == 'paintbrush') {
+        ApplicationState.brushOptions.selectedColour = toolHand.nFingersUp - 1; // shifted to account for 0=eraser
+        if(toolHand.nFingersUp == 0) { // if should be using eraser
+            if(ApplicationState.toolType == 'paintbrush') { // if not already using eraser, switch
                 ApplicationState.tool.apply(null);
                 ApplicationState.tool = new Eraser();
             }
-        } else {
-            ApplicationState.model.drawNumberFingers(results, toolHand.nFingersUp);
-            if(ApplicationState.toolType == 'eraser') {
+        } else { // if should be using paintbrush
+            ApplicationState.model.drawNumberFingers(results, toolHand.nFingersUp); // let the user know how many fingers have been detected
+            if(ApplicationState.toolType == 'eraser') { // if not already using paintbrush, switch
                 ApplicationState.tool.apply(null);
                 ApplicationState.tool = new Paintbrush();
             }
         }
     }
+    // If the active hand is within the frame
     if(activeHand != undefined) {
         ApplicationState.model.drawPointerAt(results, activeHand.tipPosition);
-        if(activeHand.active) {
+        if(activeHand.active) { // if should apply tool, do that
             ApplicationState.tool.apply(activeHand.tipPosition)
-        } else {
+        } else { // otherwise finger is not extended, so apply tool nowhere
             ApplicationState.tool.apply(null);
         }
     } else {
-        ApplicationState.tool.apply(null);
+        ApplicationState.tool.apply(null); // ensures that if active hand disappears and then reappears, line does not jump between
     }
 
 

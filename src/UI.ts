@@ -1,12 +1,11 @@
 import ApplicationState from "./ApplicationState";
-import BrushOptions from "./BrushOptions";
 import Camera from "./Camera";
 import Coords from "./Coords";
 import DOM from "./DOM";
 
 export default {
     /**
-     * Initialise the UI by resizing appropriately, adding event listeners, and finding available cameras
+     * Initialise the UI by adding event listeners and finding available cameras
      */
     init: function() {
         DOM.btnOpenMenu.onclick = this.openMenu.bind(this);
@@ -41,7 +40,7 @@ export default {
         DOM.overlay.style.display='inline';
         setTimeout(() => DOM.overlay.style.opacity="1", 10); //delay needed for the animation to run. No idea why, probably a bug.
         if(ApplicationState.camera) {
-            ApplicationState.camera.destroy();
+            ApplicationState.camera.destroy(); // destroy current camera to ensure it is not left running
             ApplicationState.camera = undefined;
         }
         navigator.mediaDevices.enumerateDevices().then(this.gotDevices.bind(this)); // check available cameras again
@@ -51,9 +50,9 @@ export default {
      */
     closeMenu: function() {
         ApplicationState.mode = "painting";
-        ApplicationState.camera = new Camera(ApplicationState.cameraID);
+        ApplicationState.camera = new Camera(ApplicationState.cameraID); // start new camera
         DOM.overlay.style.opacity="0";
-        setTimeout(() => DOM.overlay.style.display='none', 1000);
+        setTimeout(() => DOM.overlay.style.display='none', 1000); // after transition completed, hide element to allow mouse events to pass through
     },
     /**
      * Populates DOM.selectCamera with an option for each available camera
@@ -63,18 +62,21 @@ export default {
         DOM.selectCamera.innerHTML = '';
         let hasDeviceIDs = false;
         let selectedIndex = 0;
-        mediaDevices.filter(device => device.kind == 'videoinput').forEach((mediaDevice, index) => {
-                if(mediaDevice.deviceId != "") hasDeviceIDs = true;
-                const option = document.createElement('option');
-                option.value = mediaDevice.deviceId;
-                // for subsequent runs; if this is already selected
-                if(option.value == ApplicationState.cameraID) selectedIndex = index;
-                const label = mediaDevice.label || `Camera ${index+1}`;
-                const textNode = document.createTextNode(label);
-                option.appendChild(textNode);
-                DOM.selectCamera.appendChild(option);
+
+        mediaDevices.filter(device => device.kind == 'videoinput').forEach((mediaDevice, index) => { // for each video input,
+            // if any have a device ID, then device ID permission has been granted.
+            if(mediaDevice.deviceId != "") hasDeviceIDs = true;
+            const option = document.createElement('option');
+            option.value = mediaDevice.deviceId;
+            // for subsequent runs; if this is already selected
+            if(option.value == ApplicationState.cameraID) selectedIndex = index;
+            const label = mediaDevice.label || `Camera ${index+1}`;
+            const textNode = document.createTextNode(label);
+            option.appendChild(textNode);
+            DOM.selectCamera.appendChild(option);
         });
-        DOM.selectCamera.selectedIndex = selectedIndex;
+        DOM.selectCamera.selectedIndex = selectedIndex; // set index of list to whatever the current value is
+        // if there are no IDs, trigger the error function. Otherwise, hide and move on
         if(!hasDeviceIDs) {
             this.noIDs();
         } else {
@@ -118,12 +120,14 @@ export default {
      * Assigns listeners to each colour picker
      */
     setupColourPickers: function() {
-        [...DOM.coloursFlexbox.children].forEach((colourWrapper, index) => {
+        [...DOM.coloursFlexbox.children].forEach((colourWrapper, index) => { // for each child of the colours flexbox,
+            // On alpha slider input, change opacity of colour input and change application state
             (colourWrapper.getElementsByClassName("alpha_slider")[0] as HTMLInputElement).oninput = (event: Event) => {
                 let val = (event.target as SelectEventTarget).value;
                 (colourWrapper.getElementsByClassName("colour_picker")[0] as HTMLInputElement).style.opacity = (parseInt(val)/255).toString();
                 ApplicationState.brushOptions.colours[index].alpha = parseInt(val);
             }
+            // On colour input, just change application state
             (colourWrapper.getElementsByClassName("colour_picker")[0] as HTMLInputElement).oninput = (event: Event) => {
                 ApplicationState.brushOptions.colours[index].hexstring = (event.target as SelectEventTarget).value;
             }
@@ -142,6 +146,7 @@ export default {
     /**
      * Converts location from 0 to 1 into a location on the scaled painting canvas
      * Moved here to avoid redundancy
+     * This is what I spent hours on, documented through the photo of a piece of paper in my logbook
      */
     convertToCanvasSpace: function(location: Coords) {
         if(DOM.outputImage.width / DOM.outputImage.height >= DOM.paintingCanvas.width / DOM.paintingCanvas.height) {
@@ -160,21 +165,19 @@ export default {
     onFileUploaded: function(event: Event) {
         //yoinked from https://stackoverflow.com/questions/10906734/how-to-upload-image-into-html5-canvas
         let reader = new FileReader();
-        reader.onload = (event) => {
+        reader.onload = (event) => { // when image file is read,
             let img = new Image();
-            img.onload = () => {
+            img.onload = () => { // when image is loaded,
                 DOM.paintingCanvas.width = img.width;
                 DOM.paintingCanvas.height = img.height;
-                DOM.paintingCtx.drawImage(img, 0, 0);
-                this.resizeCanvas;
+                DOM.paintingCtx.drawImage(img, 0, 0); // draw to canvas
             }
-            img.src = event.target!.result as string;
+            img.src = event.target!.result as string; //load image
         }
-        reader.readAsDataURL((event.target as FileEventTarget).files[0]);
-        //console.log((event.target as FileEventTarget).files[0]);
+        reader.readAsDataURL((event.target as FileEventTarget).files[0]); // read file
     },
     /**
-     * Event handler for radio burttons
+     * Event handler for radio buttons
      */
     onHandednessChange: function(event: Event) {
         // type-casted to tell typescript the allowable values
@@ -189,6 +192,6 @@ export default {
         DOM.paintingCanvas.height = DOM.outputImage.height;
     }
 }
-/** Helper types for event listeners; asserts that they contain the value property */
+/** Helper types for event listeners; asserts that they contain the value or files property */
 type SelectEventTarget = EventTarget & {value: string}
 type FileEventTarget = EventTarget & {files: FileList}

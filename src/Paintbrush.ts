@@ -4,6 +4,9 @@ import DOM from "./DOM";
 import Tool from "./Tool";
 import UI from "./UI";
 
+/**
+ * Tool to paint a given area using a colour
+ */
 export default class Paintbrush implements Tool {
     
     public lastApplied: Coords | null = null; // coords where tool was last used
@@ -32,6 +35,7 @@ export default class Paintbrush implements Tool {
             DOM.paintingCtx.lineWidth = ApplicationState.brushOptions.thickness;
             DOM.paintingCtx.moveTo(this.lastApplied.x, this.lastApplied.y);
             DOM.paintingCtx.lineTo(location.x, location.y);
+            // set colour
             DOM.paintingCtx.strokeStyle = ApplicationState.brushOptions.colours[ApplicationState.brushOptions.selectedColour].toString();
             DOM.paintingCtx.stroke();
         }

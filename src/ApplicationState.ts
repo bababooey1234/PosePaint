@@ -4,6 +4,10 @@ import ModelWrapper from "./ModelWrapper";
 import Paintbrush from "./Paintbrush";
 import Tool from "./Tool";
 
+/**
+ * Types of all the variables kept in the global state object,
+ * including whether or not they are optional
+ */
 type State = {
     debug: boolean;
     mode: "painting" | "menu";
@@ -18,6 +22,9 @@ type State = {
     drawing: boolean;
 }
 
+/**
+ * Defaults
+ */
 export default {
     debug: false,
     mode: "menu",

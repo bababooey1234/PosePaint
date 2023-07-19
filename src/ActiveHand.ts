@@ -4,6 +4,10 @@ import Coords from "./Coords";
 export default class ActiveHand {
     tipPosition: Coords;
     active: boolean;
+    /**
+     * Finds the tip position and determine whether we should be painting
+     * @param landmarks landmarks for the active hand
+     */
     constructor(landmarks: LandmarkList) {
         this.tipPosition = landmarks[HandLandmarks.INDEX_FINGER_TIP];
 
@@ -17,10 +21,16 @@ export default class ActiveHand {
     }
 }
 
+/**
+ * Helper function; just pythagoras' formula
+ */
 function distance(a: Coords, b: Coords): number {
     return Math.sqrt((b.x-a.x)*(b.x-a.x) + (b.y-a.y)*(b.y-a.y))
 }
 
+/**
+ * Helper object to reference positions by their names
+ */
 const HandLandmarks = {
     WRIST : 0,
     THUMB_CMC : 1,
