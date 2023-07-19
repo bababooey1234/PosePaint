@@ -1,10 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <!-- Meta tags to help old browsers -->
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Camera Test</title>
-        <script defer src="generated.js"></script> <!-- Load the script, all at once, as soon as the body loads -->
+
+        <!-- Page title -->
+        <title>PosePaint</title>
+
+        <!-- Load title font (Sigmar) -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Sigmar&display=swap" rel="stylesheet">
+        
+        <!-- Load body font (Open Sans) -->
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Sigmar&display=swap" rel="stylesheet">
+        
+        <!-- Load the script, all at once, as soon as the body loads -->
+        <script defer src="generated.js"></script>
+
+        <!-- Styling for the whole application -->
         <style>
             #inputvideo {
                 display: none;
@@ -23,6 +38,7 @@
                 bottom: 0;
             }
             body {
+                font-family: 'Open Sans', sans-serif;
                 margin: 0;
             }
             #overlay {
@@ -44,6 +60,8 @@
                 position: absolute;
                 top: 25%;
                 left: 25%;
+                padding: 5px;
+                line-height: 1;
             }
             #noidswarning {
                 display: none;
@@ -87,6 +105,35 @@
             input.alpha_slider {
                 width: 100%; /* take up exactly 100% of the available space, no more no less */
             }
+            #title {
+                display: flex;
+                justify-content: center;
+                background-color: lightgrey;
+                font-family: 'Sigmar', cursive;
+                font-size: 20pt;
+            }
+            /* Can't change text on imgInput; hide it and forward a regular button input to it */
+            #imginput {
+                display: none;
+            }
+            #uldlflexbox {
+                display: flex;
+                justify-content: space-around; /* Evenly spaces the buttons */
+            }
+            #btnBegin {
+                font-family: 'Sigmar', cursive;
+                font-size: 16pt;
+                display: flex;
+                margin: auto;
+            }
+            #menuflexbox {
+                display: flex;
+                flex-direction: column;
+                align-content: space-around;
+            }
+            p {
+                margin: 0;
+            }
         </style>
     </head>
 
@@ -102,16 +149,35 @@
         <!-- Menu -->
         <div id="overlay">
             <div id="panel">
+                <div id="title">
+                    <span style="color: #ff0000;">P</span>
+                    <span style="color: #ff4000;">o</span>
+                    <span style="color: #ff7f00;">s</span>
+                    <span style="color: #ffff00;">e</span>
+                    <span style="color: #80ff00;">P</span>
+                    <span style="color: #00ff00;">a</span>
+                    <span style="color: #0000ff;">i</span>
+                    <span style="color: #8000ff;">n</span>
+                    <span style="color: #ff00ff;">t</span>
+                </div>
+                <br>
+
                 <!-- Camera selecter + Error box if no camera permissions -->
-                <select id="selectCamera"></select>
+                <div>Select Camera: <select id="selectCamera"></select></div>
                 <div id="noidswarning">
                     <span>Warning: browser is blocking access to webcam IDs, so not all webcams will be shown and their names are unknown.</span><br>
                     <button id="addIDs">Click to allow access</button>
                 </div>
-                <!-- File input and output -->
-                <input type="file" id="imginput" accept="image/*">
-                <button id="btnDownload">Download Image</button>
                 <br>
+
+                <!------------- File input and output ---------------->
+                <div id="uldlflexbox">
+                    <input type="file" id="imginput" accept="image/*"> <!-- Hidden so below button can change text -->
+                    <button onclick="document.getElementById('imginput').click()">Upload Image</button> <!-- Just forwards click to above file input. Idea from https://stackoverflow.com/a/36248168/13717363 -->
+                    <button id="btnDownload">Download Image</button>
+                </div>
+                <br>
+
                 <!------------------  Brush Size  -------------------->
                 <label for="brushsizeflexbox" id="brushsizelabel">Brush Size (px)</label>
                 <div id="brushsizeflexbox">
@@ -119,8 +185,9 @@
                     <input type="number" min="0" value="10" id="brushsizebox">
                 </div>
                 <br>
+
                 <!-------------------  Colours  ---------------------->
-                <label for="colours_flexbox" id="colours_label">Colours (RGBA)</label>
+                <label for="colours_flexbox" id="colours_label">Colours (RGB and opacity)</label>
                 <div id="colours_flexbox">
                     <div class="colour_wrapper">
                         <input class="colour_picker" type="color" value="#FF0000">
@@ -143,10 +210,37 @@
                         <input class="alpha_slider" type="range" min="0" max="255" step="1" value="255">
                     </div>
                 </div>
-                <button id="btnBegin">Close Menu</button>
+                <br>
+
+                <!-- Handedness radio buttons -->
+                <p>Which is your dominant hand?</p>
+                <input type="radio" id="righthanded" name="handedness" value="Right" checked> <!-- Default -->
+                <label for="righthanded">Right</label>
+                <input type="radio" id="lefthanded" name="handedness" value="Left">
+                <label for="lefthanded">Left</label>
+                <br>
+                <br>
+
+                <!-- start button -->
+                <button id="btnBegin">
+                    <span style="color: #ff0000">B</span>
+                    <span style="color: #ff2a00">e</span>
+                    <span style="color: #ff5500">g</span>
+                    <span style="color: #ff7f00">i</span>
+                    <span style="color: #ffbf00">n</span>
+                    <span style="color: #ffff00">&nbsp;</span> <!-- No-break space, ensures space will not be removed by the browser -->
+                    <span style="color: #aaff00">P</span>
+                    <span style="color: #55ff00">a</span>
+                    <span style="color: #00ff00">i</span>
+                    <span style="color: #00ff80">n</span>
+                    <span style="color: #00ffff">t</span>
+                    <span style="color: #00aaff">i</span>
+                    <span style="color: #0055ff">n</span>
+                    <span style="color: #0000ff">g</span>
+                </button>
             </div>
         </div>
         <!-- Button to open the menu -->
-        <button style="position: absolute; top: 97vh; left: 0" id="testopenmenu">Open Menu</button>
+        <button style="position: absolute; top: 97vh; left: 0" id="btnOpenMenu">Open Menu</button>
     </body>
 </html>

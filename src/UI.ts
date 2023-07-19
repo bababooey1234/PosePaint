@@ -15,6 +15,7 @@ export default {
         DOM.brushSizeRange.oninput = DOM.brushSizeBox.oninput = this.onBrushSizeChange;
         DOM.btnDownload.onclick = this.download;
         DOM.imgInput.onchange = this.onFileUploaded;
+        DOM.radioRight.onchange = DOM.radioLeft.onchange = this.onHandednessChange;
         navigator.mediaDevices.enumerateDevices().then(this.gotDevices.bind(this));
         this.setupColourPickers();
     },
@@ -98,13 +99,17 @@ export default {
      * Event listener for camera picker
      */
     cameraSelected: function(event: Event) {
+        // reset canvas to change size
+        DOM.paintingCanvas.width = DOM.paintingCanvas.height = 0;
         ApplicationState.cameraID = (event.target as SelectEventTarget).value;
     },
     /**
      * Event listener for brush size change
      */
     onBrushSizeChange: function(event: Event) {
-        DOM.brushSizeBox.value = (ApplicationState.brushOptions.thickness = parseInt((event.target as SelectEventTarget).value)).toString();
+        DOM.brushSizeBox.value = (event.target as SelectEventTarget).value
+        DOM.brushSizeRange.value = (event.target as SelectEventTarget).value
+        ApplicationState.brushOptions.thickness = parseInt((event.target as SelectEventTarget).value)
     },
     /**
      * Assigns listeners to each colour picker
@@ -164,6 +169,13 @@ export default {
         }
         reader.readAsDataURL((event.target as FileEventTarget).files[0]);
         //console.log((event.target as FileEventTarget).files[0]);
+    },
+    /**
+     * Event handler for radio burttons
+     */
+    onHandednessChange: function(event: Event) {
+        // type-casted to tell typescript the allowable values
+        ApplicationState.handedness = (event.target as (EventTarget & {value: "Right" | "Left"})).value;
     }
 }
 /** Helper types for event listeners; asserts that they contain the value property */
